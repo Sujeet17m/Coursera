@@ -1,33 +1,17 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const jwt = require('jsonwebtoken');
+const userRouter = require('./routes/user');
+const courseRouter = require('./routes/course');
 
 app.use(express.json());
 
-app.post('/user/signup', (req,res) => {
-    res.send('Signup Page');
-});
+app.use('/user', userRouter);
+app.use('/course', courseRouter);
 
-app.post('/user/login', (req,res) => {
-    res.send('Login Page');
-});
 
-app.get('/logout', (req,res) => {
-    res.send('Logout Page');
-});
 
-app.post('/course/purchase', (req, res) => {
-    res.send('Purchase Page');
-});
-
-app.get('/user/purchases', (req, res) => {
-    res.send('Purchases Page');
-});
-
-app.get('/courses', (req, res) => {
-    res.send('Profile Page');
-});
-
-app.listen(port, () => {
+Router.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
