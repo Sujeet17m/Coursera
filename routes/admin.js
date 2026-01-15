@@ -10,11 +10,11 @@ adminRouter.post('/login', (req, res) => {
     res.send('Admin Login Page');
 });
 
-adminRouter.post('/', (req, res) => {
+adminRouter.post('/course', (req, res) => {
     res.send('Create Course Page');
 });
 
-adminRouter.put('/:id', (req, res) => {
+adminRouter.put('/course/:id', (req, res) => {
     res.send(`Update Course with id ${req.params.id}`);
 });
 
