@@ -1,5 +1,6 @@
 const express = require('express');
 const userRouter = express.Router();
+const {UserModel} = require('../models/db');
 
 userRouter.use(express.json());
 
