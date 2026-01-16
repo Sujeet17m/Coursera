@@ -10,6 +10,7 @@ userRouter.use(express.json());
 userRouter.post('/signup', async (req, res) => {
     const userData = new UserModel({
         username: req.body.username,
+        email: req.body.email,
         password: await bcrypt.hash(req.body.password, 10),
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -24,23 +25,31 @@ userRouter.post('/signup', async (req, res) => {
 });
 
 userRouter.post('/login', async (req, res) => {
-    try {
-        const {email, password} = req.body;
+  try {
+    const { email, password } = req.body;
 
-        const user = await UserModel.findOne({username: email});
-        if (!user) {
-            return res.status(401).json({message: 'Invalid email or password'});
-        }
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({message: 'Invalid email or password'});
-        }
-        const token = jwt.sign({username: user.username}, process.env.JWT_SECRET);
-        res.json({token});
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.json({ token });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
+
 
 userRouter.get('/logout', async (req, res) => {
     // Clear the JWT cookie on logout
