@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const ObjectId = mongoose.Types.ObjectId;
 const validator = require('validator');
 
+
 const userSchema = new Schema({
     username: {type: String, required: true, unique: true},
     email: {type: String, required: true, unique: true, validate: [validator.isEmail, 'Invalid email']},
